@@ -1,0 +1,9 @@
+This project is used for practice.
+Folder: tfCode, it is used for practice using TF.
+change_name.sh: It is used for changing file names using shell.
+copy_file.py: It is used for copying links of files from one folder to another. It is in python.
+copy_file.sh: It is used for copying links of files from one to another. It is written in shell.
+crop_face.py: It is used to crop faces using dlib and python.
+montage.py: It is used for montaging images.
+read_name.py: It is used to read file names and write them into a txt file.
+resize_image.py: It is used to resize images.
