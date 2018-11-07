@@ -7,3 +7,4 @@ crop_face.py: It is used to crop faces using dlib and python.
 montage.py: It is used for montaging images.
 read_name.py: It is used to read file names and write them into a txt file.
 resize_image.py: It is used to resize images.
+
