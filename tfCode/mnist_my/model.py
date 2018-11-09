@@ -8,9 +8,6 @@ import os
 
 tf.enable_eager_extension()
 
-class net():
-    def forward(self, parameter_list):
-        pass
 a = np.array([[1,2],[3,4]])
 print(a)
 
