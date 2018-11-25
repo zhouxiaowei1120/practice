@@ -1,4 +1,5 @@
 import os
+import random
 
 file_w=open('1.sh','w')
 listFileName='/data/xiaozhou/Downloads/datasets/imagenet/caffe_ilsvrc12/val.txt'
@@ -9,7 +10,8 @@ path3='/data/xiaozhou/research/generation/generative-scattering-networks/dataset
 with open(listFileName) as f:
     listfiles = f.readlines()
 cpLabel = {}
-for i in range(41):
+label_list = random.sample(range(1,1001),250)
+for i in label_list:
     cpLabel[str(i)] = 'train'
     
 for filename in listfiles:
