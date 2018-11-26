@@ -12,69 +12,60 @@ Output: loss_log.png The file of loss curve.
 import matplotlib.pyplot as plt
 import sys
 
-#filename = input("Input:")
+filename = input("Input:")
 #filename = "E:\Desktop\Cycle_GAN\CycleGAN-and-pix2pix-master\Experiments\horse2zebra\result\loss_log.txt"
-filename = "E:/Desktop/loss_log.txt"
-open_sta = 1  # control whether print every loss on the figure. 0 for print all, 1 for print every 10
+#filename = "/home/uts/param.log"
+show_freq = 1  # control whether print every loss on the figure. show_freq for print every 'show_freq'
 
-D_A = []
-G_A = []
-Cyc_A = []
-D_B = []
-G_B = []
-Cyc_B = []
-i = 0
+loss = []
+itera = []
+flag = False
+i = -1
 
 try:
     f = open(filename,'r')
 except IOError:
-    print "Open file failed or no such file!"
+    print ("Open file failed or no such file!")
 else:  
     filelines = f.readlines()
     for fileline in filelines:
-        if fileline[0] == "=":
-            title_1 = fileline[17:31]
-            print title_1
-        elif fileline[0] == "(":
-            i += 1
-            if (open_sta):
-                if (i == 1 or i % 10 == 0):
-                    fileline = fileline.split(' ')
-                    D_A.append(float(fileline[7]))
-                    G_A.append(float(fileline[9]))
-                    Cyc_A.append(float(fileline[11]))
-                    D_B.append(float(fileline[13]))
-                    G_B.append(float(fileline[15]))
-                    Cyc_B.append(float(fileline[17]))
-            else:
-                fileline = fileline.split(' ')
-                D_A.append(float(fileline[7]))
-                G_A.append(float(fileline[9]))
-                Cyc_A.append(float(fileline[11]))
-                D_B.append(float(fileline[13]))
-                G_B.append(float(fileline[15]))
-                Cyc_B.append(float(fileline[17]))
+        # print (fileline[25:30])
+        if fileline[25:30] == 'epoch':
+            i += 1  
+            if i % show_freq == 0:
+                fileline = fileline[25:-1]
+                fileline = fileline.split(',')
+                for eachline in fileline:
+                    eachline = eachline.replace(' ','').split(':')
+                    if flag:
+                        loss.append(float(eachline[1]))
+                        flag = False
+                    else:
+                        itera.append(int(eachline[1])) 
+                        flag = True
     f.close()
         
-    itera = [n for n in range(1,len(D_A)+1)]
-
+    
     fig1 = plt.figure(figsize=(14.5,10.5))
 
-    plt.subplot(2,1,2)
-    plt.plot(itera,D_B,'r')
-    plt.plot(itera,G_B,'g')
-    plt.plot(itera,Cyc_B,'b')  
-    label = ["D_B","G_B","Cyc_B"]
-    plt.legend(label,loc=0,ncol=3)
+    # plt.subplot(2,1,2)
+    # plt.plot(itera,D_B,'r')
+    # plt.plot(itera,G_B,'g')
+    # plt.plot(itera,Cyc_B,'b')  
+    # label = ["D_B","G_B","Cyc_B"]
+    # plt.legend(label,loc=0,ncol=3)
         
-    plt.subplot(2,1,1)
-    plt.plot(itera,D_A,'r')
-    plt.plot(itera,G_A,'g')
-    plt.plot(itera,Cyc_A,'b')
-    label = ["D_A","G_A","Cyc_A"]
+    # plt.subplot(2,1,1)
+    # plt.plot(itera,D_A,'r')
+    # plt.plot(itera,G_A,'g')
+    # plt.plot(itera,Cyc_A,'b')
+    # label = ["D_A","G_A","Cyc_A"]
+    plt.plot(itera,loss,'g')
+    label = ['training loss']
     plt.legend(label,loc=0,ncol=3)
     
-    plt.title(title_1)
-    plt.savefig("E:/Desktop/loss_log.png")
+    title = 'Generate data on the boundary: dataset=\'imagenet\', iteration=500'
+    plt.title(title)
+    plt.savefig("loss_log.png")
     plt.show()
     
