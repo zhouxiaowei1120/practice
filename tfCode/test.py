@@ -3,7 +3,7 @@ from tensorflow.python.platform import gfile
 
 graph = tf.get_default_graph()
 graphdef = graph.as_graph_def()
-graphdef.ParseFromString(gfile.FastGFile("C:/Users/12882357/Desktop/tensorflow_inception_graph.pb","rb").read())
+graphdef.ParseFromString(gfile.FastGFile("tensorflow_inception_graph.pb","rb").read())
 _ = tf.import_graph_def(graphdef, name="")
 
 with tf.Session() as sess:
@@ -12,4 +12,4 @@ with tf.Session() as sess:
     #options = sess.graph.get_operations()
     #print(options)
 
-summary_write = tf.summary.FileWriter("C:/Users/12882357/Desktop/logdir",graph)
+summary_write = tf.summary.FileWriter("./logdir",graph)
