@@ -7,7 +7,7 @@ graphdef.ParseFromString(gfile.FastGFile("tensorflow_inception_graph.pb","rb").r
 _ = tf.import_graph_def(graphdef, name="")
 
 with tf.Session() as sess:
-    scope = sess.graph.get_name_scope()
+    scope = sess.graph.get_operations()
     print(scope)
     #options = sess.graph.get_operations()
     #print(options)
