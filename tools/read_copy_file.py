@@ -2,10 +2,10 @@ import os
 import random
 
 file_w=open('1.sh','w')
-listFileName='/data/xiaozhou/Downloads/datasets/imagenet/caffe_ilsvrc12/val.txt'
+listFileName='/datastore/zho063/Downloads/datasets/val.txt'
 cpLabel = {'242':'random500_1','309':'random500_2','310':'random500_3','347':'random500_4','348':'random500_5','349':'random500_6','357':'random500_7','358':'random500_8','359':'random500_9'}
-path2='/data/xiaozhou/Downloads/datasets/imagenet/imagenet12-val/'
-path3='/data/xiaozhou/research/generation/generative-scattering-networks/datasets/imagenet/'
+path2='/datastore/zho063/Downloads/datasets/imagenet12-val/'
+path3='/datastore/zho063/research/generation/datasets/imagenet/'
 
 with open(listFileName) as f:
     listfiles = f.readlines()
