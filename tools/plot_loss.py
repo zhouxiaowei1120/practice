@@ -12,9 +12,9 @@ Output: loss_log.png The file of loss curve.
 import matplotlib.pyplot as plt
 import sys
 
-#filename = input("Input:")
+# filename = input("Input:")
 #filename = "E:\Desktop\Cycle_GAN\CycleGAN-and-pix2pix-master\Experiments\horse2zebra\result\loss_log.txt"
-filename = "../../param.log"
+filename = '/home/uts/Desktop/xiaozhou/param.log'
 show_freq = 1  # control whether print every loss on the figure. show_freq for print every 'show_freq'
 
 loss = []
@@ -71,11 +71,11 @@ else:
     label = ['gradients']
     plt.legend(label,loc=0,ncol=3)
     
-    title = 'Generate data on the boundary: dataset=\'imagenet\', iteration=500'
+    title = 'Gradients'
     plt.title(title)
-    plt.savefig("loss_log.png")
+    plt.savefig("/home/uts/Desktop/xiaozhou/loss_log.png")
     plt.show()
 
-    plt.hist(grad,bins=100,normed=True)
-    plt.show()
+    # plt.hist(grad)
+    # plt.show()
     
