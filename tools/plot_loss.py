@@ -12,16 +12,18 @@ Output: loss_log.png The file of loss curve.
 import matplotlib.pyplot as plt
 import sys
 
-# filename = input("Input:")
-#filename = "E:\Desktop\Cycle_GAN\CycleGAN-and-pix2pix-master\Experiments\horse2zebra\result\loss_log.txt"
-filename = '/home/uts/Desktop/xiaozhou/param.log'
+filename = input("Input:")
+# filename = '/home/uts/Desktop/param.log'
+savepath = filename.split('.')[0]
 show_freq = 1  # control whether print every loss on the figure. show_freq for print every 'show_freq'
 
-loss = []
 itera = []
 grad = []
+aeLoss = []
+gLoss = []
+Dloss = []
 flag = False
-i = -1
+i = j = k = m = -1
 
 try:
     f = open(filename,'r')
@@ -36,44 +38,52 @@ else:
             if i % show_freq == 0:
                 fileline = fileline.split(':')
                 grad.append(float(fileline[-1].strip()))
-                itera.append(i)
-        # if fileline[25:30] == 'epoch':
-        #     i += 1  
-        #     if i % show_freq == 0:
-        #         fileline = fileline[25:-1]
-        #         fileline = fileline.split(',')
-        #         for eachline in fileline:
-        #             eachline = eachline.replace(' ','').split(':')
-        #             if flag:
-        #                 loss.append(float(eachline[1]))
-        #                 flag = False
-        #             else:
-        #                 itera.append(int(eachline[1])) 
-        #                 flag = True
+        elif 'Autoencoder Loss:' in fileline:
+            j += 1  
+            if j % show_freq == 0:
+                fileline = fileline.split(':')
+                aeLoss.append(float(fileline[-1].strip()))
+        elif 'Discriminator Loss:' in fileline:
+            k += 1  
+            if k % show_freq == 0:
+                fileline = fileline.split(':')
+                Dloss.append(float(fileline[-1].strip()))
+        elif 'Generator Loss:' in fileline:
+            m += 1  
+            if m % show_freq == 0:
+                fileline = fileline.split(':')
+                gLoss.append(float(fileline[-1].strip()))
+        else:
+            pass
+        
     f.close()
         
     
     fig1 = plt.figure(figsize=(14.5,10.5))
 
-    # plt.subplot(2,1,2)
-    # plt.plot(itera,D_B,'r')
-    # plt.plot(itera,G_B,'g')
-    # plt.plot(itera,Cyc_B,'b')  
-    # label = ["D_B","G_B","Cyc_B"]
-    # plt.legend(label,loc=0,ncol=3)
+    plt.subplot(2,2,1)
+    plt.plot(list(range(len(grad))),grad,'r')
+    label = ["Gradient of generator"]
+    plt.legend(label,loc=0)
         
-    # plt.subplot(2,1,1)
-    # plt.plot(itera,D_A,'r')
-    # plt.plot(itera,G_A,'g')
-    # plt.plot(itera,Cyc_A,'b')
-    # label = ["D_A","G_A","Cyc_A"]
-    plt.plot(itera,grad,'g')
-    label = ['gradients']
-    plt.legend(label,loc=0,ncol=3)
+    plt.subplot(2,2,2)
+    plt.plot(list(range(len(aeLoss))),aeLoss,'r')
+    label = ["Autoencoder loss"]
+    plt.legend(label,loc=0)
     
-    title = 'Gradients'
-    plt.title(title)
-    plt.savefig("/home/uts/Desktop/xiaozhou/loss_log.png")
+    plt.subplot(2,2,3)
+    plt.plot(list(range(len(Dloss))),Dloss,'g')
+    label = ['Discriminator loss']
+    plt.legend(label,loc=0)
+
+    plt.subplot(2,2,4)
+    plt.plot(list(range(len(gLoss))),gLoss,'g')
+    label = ['Generator loss']
+    plt.legend(label,loc=0)
+    
+    title = 'Gradients and loss of interpretable feature selection'
+    plt.suptitle(title)
+    plt.savefig(savepath+".png")
     plt.show()
 
     # plt.hist(grad)
