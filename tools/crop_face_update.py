@@ -31,12 +31,12 @@ def getface(rgbImg):
     return [facefound,x1,x2,y1,y2,fshape]
 
 #pathname = argv[1]
-pathname = argv[1]
-#"/data/zxw/xiaolianer/deepfeatinterp-master/images/exp_pure/"
+# pathname = argv[1]
+pathname = ''pure/"
 path_post = argv[2]
 #"/data/zxw/xiaolianer/deepfeatinterp-master/images/exp_pure_post/"
-w_max =800
-h_max =1000
+w_max =64
+h_max =64
 for root,dirs,filenames in os.walk(pathname):
     for imname in filenames:
         post_dir = path_post+root.split('/')[-1]
