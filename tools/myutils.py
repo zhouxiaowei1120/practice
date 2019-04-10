@@ -3,21 +3,26 @@
 import logging
 import argparse
 import ast
+from datetime import datetime
 
-
-def mylogger():
+def mylogger(logpath='./param.log'):
     logger = logging.getLogger('mylogger')
     logger.setLevel('DEBUG')
     BASIC_FORMAT = "%(asctime)s:%(levelname)s:%(message)s"
     DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
     formatter = logging.Formatter(BASIC_FORMAT, DATE_FORMAT)
-    chlr = logging.StreamHandler() # 输出到控制台的handler
-    chlr.setFormatter(formatter)
-    chlr.setLevel('DEBUG')  # 也可以不设置，不设置就默认用logger的level
-    fhlr = logging.FileHandler('param.log') # 输出到文件的handler
+    fhlr = logging.FileHandler(logpath) # 
     fhlr.setFormatter(formatter)
-    logger.addHandler(chlr)
     logger.addHandler(fhlr)
+    str_sharp = '#####################################################################'
+    logger.info('Record Experiment Information and Conditions\n'+str_sharp+'\n\n\n'+str_sharp+'\n')
+    logger.info('  Experiment Setting and Running Logs\n\n')
+
+    chlr = logging.StreamHandler() # 
+    chlr.setFormatter(formatter)
+    chlr.setLevel('DEBUG')  # 
+    logger.addHandler(chlr)
+
 
 def parseArg ():
     parseArgs = argparse.ArgumentParser(description='Arguments for project.')
@@ -47,9 +52,13 @@ def parseArg ():
     parseArgs.add_argument('--direction_type',type=str, default= 'cav', help='the name of direction type')
     parseArgs.add_argument('--direction_model',type=str, default= 'att_svm', choices=['linear','att_svm','logistic', 'max_dis_svm', 'att_neighbor_svm'], help='the name of model for training direction')
     parseArgs.add_argument('--cav_imgnum',type=int, default= 200, help='the num of examples for training svm')
-    parseArgs.add_argument('--logfile',type=str, default= './param.log', help='the name of log file')
+    parseArgs.add_argument('--exp_path', type=str, default='./experiments', help='the path for saving experiments results.')
+    parseArgs.add_argument('--exp_name',type=str, default= 'exp_param', help='the name of experiments')
 
     
     #parseArgs.add_argument('--train_num',type=int, default= 0, help='0 means using all the image in train dir')
     return parseArgs.parse_args()
 
+def time_stamp():
+  TIMESTAMP = "{0:%Y-%m-%dT%H-%M-%S}".format(datetime.now())
+  return TIMESTAMP

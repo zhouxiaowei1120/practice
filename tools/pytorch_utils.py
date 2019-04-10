@@ -1,6 +1,7 @@
 from collections import OrderedDict
 import torch
 import torch.utils.data as data
+import tensorflow as tf
 
 def loadweights(model, filename_model, gpu_ids=''):
     if len(gpu_ids) == 0:
@@ -69,6 +70,37 @@ class celebA_dataset(data.Dataset):
     
     def __len__(self):
         return len(self.filenames)
+
+def cover_pytorch_tf(pytorch_weights, tf_model_var, sess, match_dict):
+    '''
+    @Description: This function is used to copy trained weights from pytorch to tensorflow.
+    @param {type} : {pytorch_weights: OrderDict, save the weights of one model
+                     tf_model_var: tf variable list, save the variable list in tf model
+                     sess: tf.Session()
+                     match_dict: dic, the match relationship between pytorch weights and tf weiths}
+    @return: copied weights file name for tf
+    '''
+    import tensorflow as tf
+    # py_weights_name = ['num_batches_tracked']
+    tf_py_weights_name = {'kernel':'weight', 'bias':'bias', 'gamma':'weight', 'beta':'bias', 'moving_mean':'running_mean', 'moving_variance':'running_var'}
+    for tf_v in tf_model_var:
+        tf_names = tf_v.name.split('/')
+        tf_layer_name = '/'.join(tf_names[1:3]) # used for confirm the layer relationship
+        
+        py_weight_name = tf_py_weights_name.get(tf_names[3].split(':')[0]) # used for confirming the weight or bias relationship
+        py_layer_name = match_dict.get(tf_layer_name)
+        if py_layer_name == None:
+            continue
+        py_name = '.'.join([py_layer_name, py_weight_name])
+        py_w = pytorch_weights.get(py_name)
+        if len(py_w.shape) == 4:
+            py_w = py_w.permute(3,2,1,0) # [64, 3, 3, 3] => [3, 3, 3, 64]
+        elif py_w.dim() == 2:
+            py_w = py_w.permute(1,0)
+        assign_op = tf.assign(tf_v, py_w.cpu().detach().numpy())
+        sess.run(assign_op)
+    return tf_model_var
+
 
 kwargs = {'num_workers': 1, 'pin_memory': True} if use_cuda else {}
 train_loader = torch.utils.data.DataLoader(
