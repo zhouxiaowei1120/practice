@@ -46,7 +46,7 @@ def parseArg ():
     parseArgs.add_argument('--eps_step',type=float, default= 0.1, help='the step size for updating epsilon')
     parseArgs.add_argument('--eps_max',type=int, default= 21, help='the maximum of epsilon')
     parseArgs.add_argument('--img_num',type=int, default= 20, help='the maximum of images to generate adversatial images')
-    parseArgs.add_argument('--eps_list',type=list, default= [0.1,1.0, 2.0,3.0,4.0, 5.0, 7.0,9.0,11.0,13.0, 15.0,17.0, 20.0], nargs='+', help='the list of epsilon to save check attack rate') # Thsi method does not work in commadline, we should give the values in this file.
+    parseArgs.add_argument('--eps_list', type=float, default= [0.1,1.6, 3.2, 5.5, 10.0, 20.0], nargs='+', help='the list of epsilon to save check attack rate')
     parseArgs.add_argument('--v',type=ast.literal_eval, default = True, help='display the debug info or not')
     parseArgs.add_argument('--info', '-I', type=str, default='Info for running program',
                         help='This info is used to record the running conditions for the current program, which is stored in param.log')
