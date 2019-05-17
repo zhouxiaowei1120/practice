@@ -4,6 +4,7 @@ import logging
 import argparse
 import ast
 from datetime import datetime
+import os
 
 def mylogger(logpath='./param.log'):
     logger = logging.getLogger('mylogger')
@@ -15,8 +16,8 @@ def mylogger(logpath='./param.log'):
     fhlr.setFormatter(formatter)
     logger.addHandler(fhlr)
     str_sharp = '#####################################################################'
-    logger.info('Record Experiment Information and Conditions\n'+str_sharp+'\n\n\n'+str_sharp+'\n')
-    logger.info('  Experiment Setting and Running Logs\n\n')
+    logger.info('Record Experiment Information and Conditions\n'+str_sharp+'\n\n\n'+str_sharp)
+    # logger.info('  Experiment Setting and Running Logs\n\n'))
 
     chlr = logging.StreamHandler() # 
     chlr.setFormatter(formatter)
@@ -52,13 +53,27 @@ def parseArg ():
     parseArgs.add_argument('--direction_type',type=str, default= 'cav', help='the name of direction type')
     parseArgs.add_argument('--direction_model',type=str, default= 'att_svm', choices=['linear','att_svm','logistic', 'max_dis_svm', 'att_neighbor_svm'], help='the name of model for training direction')
     parseArgs.add_argument('--cav_imgnum',type=int, default= 200, help='the num of examples for training svm')
-    parseArgs.add_argument('--exp_path', type=str, default='./experiments', help='the path for saving experiments results.')
-    parseArgs.add_argument('--exp_name',type=str, default= 'exp_param', help='the name of experiments')
-
-    
+    parseArgs.add_argument('--v',type=ast.literal_eval, default = True, help='display the debug info or not')
+    parseArgs.add_argument('--info', '-I', type=str, default='Info for running program',
+                        help='This info is used to record the running conditions for the current program, which is stored in param.log')
+    parseArgs.add_argument('--res_dir',type=str, default='./experiments', help='the path for saving results')
+    parseArgs.add_argument('--exp_att',type=str, default='mnist_512_Norm2', help='the name of current experiment')
+    parseArgs.add_argument('--logfile',type=str, default= './param.log', help='the name of log file')
+   
     #parseArgs.add_argument('--train_num',type=int, default= 0, help='0 means using all the image in train dir')
     return parseArgs.parse_args()
 
 def time_stamp():
   TIMESTAMP = "{0:%Y-%m-%dT%H-%M-%S}".format(datetime.now())
   return TIMESTAMP
+
+def create_name_experiment(datasets, attribute_experiment):
+    name_experiment = '{}/{}'.format(datasets, attribute_experiment)
+
+    print('Name experiment: {}'.format(name_experiment))
+
+    return name_experiment
+
+def create_folder(folder):
+  if not os.path.exists(folder):
+    os.makedirs(folder)
